@@ -2,20 +2,31 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 
+# from app_name.models import ModelName
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['id', 'username', 'first_name', 'last_name']
+
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'first_name', 'last_name', 'email']
+        fields = ['username', 'password', 
+        # 'first_name', 'last_name', 'email'
+        ]
 
     def create(self, validated_data):
         username = validated_data['username']
         password = validated_data['password']
-        email = validated_data['email']
-        first_name = validated_data['first_name']
-        last_name = validated_data['last_name']
-        new_user = User(username=username, email= email, first_name = first_name, last_name = last_name)
+        # email = validated_data['email']
+        # first_name = validated_data['first_name']
+        # last_name = validated_data['last_name']
+        new_user = User(username=username, 
+        # email= email, first_name = first_name, last_name = last_name
+        )
         new_user.set_password(password)
         new_user.save()
         return validated_data
@@ -50,3 +61,24 @@ class UserLoginSerializer(serializers.Serializer):
 
         data["token"] = token
         return data
+
+
+#List ser
+# class ListSerializer(serializers.ModelSerializer):
+    # author = UserSerializer()
+#     class Meta:
+#         model = ModelName
+#         fields = ['field_1', 'field_2', 'field_3','author']
+
+    # def get_written_by(self, obj):
+    #     return "%s %s"%(obj.author.first_name, obj.author.last_name)
+
+# class DetailSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ModelName
+#         fields = ['field_1', 'field_2', 'field_3', 'field_4', 'field_5',]
+
+# class CreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ModelName
+#         fields = ['field_1', 'field_2', 'field_3', 'field_4',]

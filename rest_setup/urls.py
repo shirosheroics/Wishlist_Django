@@ -21,12 +21,18 @@ from django.conf import settings
 from api.views import (
 	UserCreateAPIView,
 	UserLoginAPIView,
+    # ListView,
+    # DetailView
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', UserCreateAPIView.as_view(), name="signup"),
     path('signin/',UserLoginAPIView.as_view(), name="signin"),
+    # path('list/', ListView.as_view(), name='list'),
+    # path('detail/<int:object_id>/', DetailView.as_view(), name='detail'),
+
+
 ]
 
 
