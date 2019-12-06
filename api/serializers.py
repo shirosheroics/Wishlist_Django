@@ -2,11 +2,11 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 
-# from app_name.models import ModelName
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'first_name', 'last_name']
+from .models import Item
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -62,6 +62,39 @@ class UserLoginSerializer(serializers.Serializer):
         data["token"] = token
         return data
 
+
+class ItemListSerializer(serializers.ModelSerializer):
+	# detail = serializers.HyperlinkedIdentityField(
+	# 	view_name = "detail",
+	# 	lookup_field = "id",
+	# 	lookup_url_kwarg = "item_id",
+	# 	)
+	class Meta:
+		model = Item
+		fields = [
+			'name',
+			'image',
+			'url',
+            'id'
+			]
+	
+
+
+class ItemDetailSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Item
+		fields = [
+			'name',
+			'image',
+			'url',
+            'id'
+			]
+	
+class ItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['name', 'image', 'url']
 
 #List ser
 # class ListSerializer(serializers.ModelSerializer):
