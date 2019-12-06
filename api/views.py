@@ -42,17 +42,18 @@ class UserLoginAPIView(APIView):
 #list views
 
 class ItemListView(ListAPIView):
-    queryset = Item.objects.all()
+    queryset = Item.objects.all().order_by('-id')
     serializer_class = ItemListSerializer
     filter_backends = [OrderingFilter, SearchFilter]
     permission_classes = [AllowAny,]
-    search_fields = ['name',]
+    search_fields = ['name']
 
 
 class ItemDetailView(RetrieveAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemDetailSerializer
-    permission_classes = [IsAuthenticated,IsOwner]
+    permission_classes = [AllowAny,]
+    # permission_classes = [IsAuthenticated,IsOwner]
     lookup_field = 'id'
     lookup_url_kwarg = 'item_id'
 
@@ -63,6 +64,13 @@ class ItemCreatView(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+class ItemDeleteView(DestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemListSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    lookup_field = 'id'
+    lookup_url_kwarg = 'item_id'
 
 # class ListView(ListAPIView):
     # queryset = ModelName.objects.all()

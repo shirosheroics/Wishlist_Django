@@ -24,7 +24,8 @@ from api.views import (
     ItemCreatView,
     ItemDetailView,
     ItemListView,
-    ItemCreatView
+    ItemCreatView,
+    ItemDeleteView
     # ListView,
     # DetailView
 )
@@ -36,6 +37,8 @@ urlpatterns = [
     path('list/', ItemListView.as_view(), name='list'),
     path('create/', ItemCreatView.as_view(), name='create'),
     path('detail/<int:item_id>/', ItemDetailView.as_view(), name='detail'),
+    path('delete/<int:item_id>/', ItemDeleteView.as_view(), name="delete",
+    )
 
 
 ]
