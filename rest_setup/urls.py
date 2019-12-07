@@ -19,13 +19,14 @@ from rest_framework_jwt.views import obtain_jwt_token
 from django.conf.urls.static import static
 from django.conf import settings
 from api.views import (
-	UserCreateAPIView,
-	UserLoginAPIView,
+    UserCreateAPIView,
+    UserLoginAPIView,
     ItemCreatView,
     ItemDetailView,
     ItemListView,
     ItemCreatView,
-    ItemDeleteView
+    ItemDeleteView,
+    ItemUpdateView
     # ListView,
     # DetailView
 )
@@ -33,18 +34,17 @@ from api.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', UserCreateAPIView.as_view(), name="signup"),
-    path('signin/',UserLoginAPIView.as_view(), name="signin"),
+    path('signin/', UserLoginAPIView.as_view(), name="signin"),
     path('list/', ItemListView.as_view(), name='list'),
-    # path('list/<int:user_id>/', ItemListView.as_view(), name='list'),
+    path('check/<int:item_id>/', ItemUpdateView.as_view(), name='check'),
     path('create/', ItemCreatView.as_view(), name='create'),
     path('detail/<int:item_id>/', ItemDetailView.as_view(), name='detail'),
     path('delete/<int:item_id>/', ItemDeleteView.as_view(), name="delete",
-    )
+         )
 
 
 ]
 
 
-
-urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

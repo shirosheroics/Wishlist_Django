@@ -2,18 +2,21 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.generics import (
-	CreateAPIView,
+    CreateAPIView,
     ListAPIView,
     RetrieveAPIView,
+    UpdateAPIView,
+    RetrieveUpdateAPIView,
     DestroyAPIView
 )
 from .serializers import (
-	UserCreateSerializer, 
-	UserLoginSerializer,
+    UserCreateSerializer,
+    UserLoginSerializer,
     ItemListSerializer,
     ItemDetailSerializer,
-    ItemCreateSerializer
-    # ListSerializer,  
+    ItemCreateSerializer,
+    ItemUpdateCheckerSerializer
+    # ListSerializer,
     # DetailSerializer,
     # RetrieveUpdateAPIView
 )
@@ -25,8 +28,10 @@ from .permissions import IsOwner
 
 # Create your views here.
 
+
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
+
 
 class UserLoginAPIView(APIView):
     serializer_class = UserLoginSerializer
@@ -39,18 +44,20 @@ class UserLoginAPIView(APIView):
             return Response(valid_data, status=HTTP_200_OK)
         return Response(serializer.errors, HTTP_400_BAD_REQUEST)
 
-#list views
+# list views
+
 
 class ItemListView(ListAPIView):
     # queryset = Item.objects.all().order_by('-id')
     serializer_class = ItemListSerializer
     # filter_backends = [OrderingFilter, SearchFilter]
-    permission_classes = [AllowAny,]
-    # search_fields = ['name'] 
+    permission_classes = [AllowAny, ]
+    # search_fields = ['name']
     # def get_queryset(self):
     #     # user = self.request.user
     #     user_id = self.kwargs['user_id']
     #     return Item.objects.filter(owner__id=user_id).order_by('-id')
+
     def get_queryset(self):
         queryset = Item.objects.all()
         user_id = self.request.query_params.get('user_id', None)
@@ -60,17 +67,15 @@ class ItemListView(ListAPIView):
         return []
 
 
-
-
 class ItemDetailView(RetrieveAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemDetailSerializer
-    permission_classes = [AllowAny,]
+    permission_classes = [AllowAny, ]
     # permission_classes = [IsAuthenticated,IsOwner]
     lookup_field = 'id'
     lookup_url_kwarg = 'item_id'
 
- 
+
 class ItemCreatView(CreateAPIView):
     serializer_class = ItemCreateSerializer
     permission_classes = [IsAuthenticated, IsOwner]
@@ -78,17 +83,21 @@ class ItemCreatView(CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+
+class ItemUpdateView(RetrieveUpdateAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemUpdateCheckerSerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'id'
+    lookup_url_kwarg = 'item_id'
+
+
 class ItemDeleteView(DestroyAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemListSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     lookup_field = 'id'
     lookup_url_kwarg = 'item_id'
-
-# class ListView(ListAPIView):
-    # queryset = ModelName.objects.all()
-    # serializer_class = ListSerializer
-    # permission_classes = [IsAuthenticated, IsOwner]
 
 
 # class DetailView(RetrieveAPIView):

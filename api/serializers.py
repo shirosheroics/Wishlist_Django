@@ -3,6 +3,8 @@ from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 
 from .models import Item
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -14,9 +16,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 
-        # 'first_name', 'last_name', 'email'
-        ]
+        fields = ['username', 'password',
+                  # 'first_name', 'last_name', 'email'
+                  ]
 
     def create(self, validated_data):
         username = validated_data['username']
@@ -24,9 +26,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         # email = validated_data['email']
         # first_name = validated_data['first_name']
         # last_name = validated_data['last_name']
-        new_user = User(username=username, 
-        # email= email, first_name = first_name, last_name = last_name
-        )
+        new_user = User(username=username,
+                        # email= email, first_name = first_name, last_name = last_name
+                        )
         new_user.set_password(password)
         new_user.save()
         return validated_data
@@ -63,40 +65,39 @@ class UserLoginSerializer(serializers.Serializer):
         return data
 
 
-class ItemListSerializer(serializers.ModelSerializer):
-	# detail = serializers.HyperlinkedIdentityField(
-	# 	view_name = "detail",
-	# 	lookup_field = "id",
-	# 	lookup_url_kwarg = "item_id",
-	# 	)
-	class Meta:
-		model = Item
-		fields = [
-			'name',
-			'image',
-			'url',
-            'id'
-			]
-	
-
-
 class ItemDetailSerializer(serializers.ModelSerializer):
 
-	class Meta:
-		model = Item
-		fields = [
-			'name',
-			'image',
-			'url',
-            'id'
-			]
-	
-class ItemCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['name', 'image', 'url']
+        fields = [
+            'name',
+            'image',
+            'url',
+            'id'
+        ]
 
-#List ser
+
+class ItemCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
+class ItemUpdateCheckerSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
+class ItemListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+# List ser
 # class ListSerializer(serializers.ModelSerializer):
     # author = UserSerializer()
 #     class Meta:
