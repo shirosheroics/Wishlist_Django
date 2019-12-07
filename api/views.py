@@ -42,11 +42,24 @@ class UserLoginAPIView(APIView):
 #list views
 
 class ItemListView(ListAPIView):
-    queryset = Item.objects.all().order_by('-id')
+    # queryset = Item.objects.all().order_by('-id')
     serializer_class = ItemListSerializer
-    filter_backends = [OrderingFilter, SearchFilter]
+    # filter_backends = [OrderingFilter, SearchFilter]
     permission_classes = [AllowAny,]
-    search_fields = ['name']
+    # search_fields = ['name'] 
+    # def get_queryset(self):
+    #     # user = self.request.user
+    #     user_id = self.kwargs['user_id']
+    #     return Item.objects.filter(owner__id=user_id).order_by('-id')
+    def get_queryset(self):
+        queryset = Item.objects.all()
+        user_id = self.request.query_params.get('user_id', None)
+        if user_id is not None:
+            queryset = queryset.filter(owner__id=user_id).order_by('-id')
+            return queryset
+        return []
+
+
 
 
 class ItemDetailView(RetrieveAPIView):

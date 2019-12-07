@@ -35,6 +35,7 @@ urlpatterns = [
     path('signup/', UserCreateAPIView.as_view(), name="signup"),
     path('signin/',UserLoginAPIView.as_view(), name="signin"),
     path('list/', ItemListView.as_view(), name='list'),
+    # path('list/<int:user_id>/', ItemListView.as_view(), name='list'),
     path('create/', ItemCreatView.as_view(), name='create'),
     path('detail/<int:item_id>/', ItemDetailView.as_view(), name='detail'),
     path('delete/<int:item_id>/', ItemDeleteView.as_view(), name="delete",
